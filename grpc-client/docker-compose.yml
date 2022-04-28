@@ -1,0 +1,11 @@
+version: "3"
+
+services:
+  client:
+    image: jaredosuna/api_client_grpc_201700893
+    ports:
+      - "3000:3000"
+    environment:
+      - SERVER_IP=`YourServerIP`
+      - SERVER_PORT=`YourServerPort`
+      - API_PORT=`YourAPIPort`
