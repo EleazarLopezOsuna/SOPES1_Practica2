@@ -4,7 +4,7 @@ import (
 	"context"
 	encoding "encoding/json"
 	"fmt"
-	pb "github.com/JaredOsuna/SOPES1_Practica2/grpc-server"
+	pb "github.com/JaredOsuna/SOPES1_Practica2/grpc-server/proto"
 	"github.com/google/uuid"
 	"github.com/joho/godotenv"
 	"github.com/segmentio/kafka-go"
