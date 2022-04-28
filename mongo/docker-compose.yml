@@ -1,0 +1,13 @@
+version: "3"
+services:
+  db:
+    image: mongo
+    container_name: dbmongo
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: sopes1
+      MONGO_INITDB_ROOT_PASSWORD: 1234
+    ports:
+      - "80:27017"
+    restart: always
+    volumes:
+      - /home/($USER)/mongodata:/data/db
