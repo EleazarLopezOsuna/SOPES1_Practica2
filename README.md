@@ -78,7 +78,7 @@ kubectl create -f 'https://strimzi.io/install/latest?namespace=kafka' -n kafka
 Para poder instalar MongoDB en nuestra VM haremos uso de docker compose. Para poder levantar MongoDB necesitamos ejecutar el siguiente comando `docker compose up -d` en la ubicacion donde tengamos nuestro archivo `docker-compose.yml`.
 Los atributos entre <> son variables de entorno que pueden ser setteadas desde el YAML.
 ##### docker-compose.yml
-```Docker
+```yml
 version: "3"
 services:
   db:
@@ -267,14 +267,13 @@ El archivo de carga debe de tener la siguiente estructura, sustituyendo los <>
 ```json
 [
     {
-        "game_id":<INTEGER>,
-        "players":<INTEGER>
+        "game_id": 3,
+        "players": 50
     },
     {
-        "game_id":<INTEGER>,
-        "players":<INTEGER>
-    },
-    ...
+        "game_id": 2,
+        "players": 100
+    }
 ]
 ```
 Luego de cargar el archivo podemos volver a MongoDB Compass y verificar los datos dentro de nuestra collection.
