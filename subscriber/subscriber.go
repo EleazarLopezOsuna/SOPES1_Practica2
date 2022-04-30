@@ -4,11 +4,9 @@ import (
 	"context"
 	encoder "encoding/json"
 	"fmt"
-	"github.com/joho/godotenv"
 	"github.com/segmentio/kafka-go"
 	"go.mongodb.org/mongo-driver/mongo"
 	"go.mongodb.org/mongo-driver/mongo/options"
-	"log"
 	"os"
 	"time"
 )
@@ -36,10 +34,10 @@ type Match struct {
 
 func main() {
 
-	envError := godotenv.Load(".env")
+	/*envError := godotenv.Load(".env")
 	if envError != nil {
 		log.Fatal(envError.Error())
-	}
+	}*/
 	var (
 		_kafka = Kafka{
 			fmt.Sprintf("%v:%v", os.Getenv("KAFKA_HOST"), os.Getenv("KAFKA_PORT")),

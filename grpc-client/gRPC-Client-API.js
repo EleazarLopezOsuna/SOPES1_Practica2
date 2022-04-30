@@ -20,7 +20,7 @@ let target;
 if (argv.target) {
     target = argv.target;
 } else {
-    target = process.env.SERVER_IP + ':' + process.env.SERVER_PORT;
+    target = process.env.SERVER_IP + ":" + process.env.SERVER_PORT;
 }
 let client = new squidGame_proto.Matches(target,grpc.credentials.createInsecure());
 

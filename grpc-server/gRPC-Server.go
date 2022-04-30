@@ -4,18 +4,15 @@ import (
 	"context"
 	encoding "encoding/json"
 	"fmt"
-	pb "github.com/JaredOsuna/SOPES1_Practica2/grpc-server/proto"
-	"github.com/google/uuid"
-	"github.com/joho/godotenv"
-	"github.com/segmentio/kafka-go"
-	"google.golang.org/grpc"
+	"github.com/confluentinc/confluent-kafka-go/kafka"
 	"log"
 	"math"
 	"math/rand"
 	"net"
-	"os"
 	"strconv"
-	"strings"
+
+	pb "github.com/JaredOsuna/SOPES1_Practica2/grpc-server/proto"
+	"google.golang.org/grpc"
 )
 
 type server struct {
@@ -99,11 +96,11 @@ func (s *server) AddMatch(ctx context.Context, in *pb.MatchRequest) (*pb.MatchRe
 		fmt.Printf("Error: %v\n", err)
 	}
 
-	randomKey := strings.Replace(uuid.New().String(), "-", "", -1)
+	//randomKey := strings.Replace(uuid.New().String(), "-", "", -1)
 
 	msgResult := " Winner: player " + strconv.Itoa(winner)
 
-	_host := os.Getenv("KAFKA_HOST")
+	/*_host := os.Getenv("KAFKA_HOST")
 	_port := os.Getenv("KAFKA_PORT")
 	_topic := os.Getenv("KAFKA_TOPIC")
 	_broker := fmt.Sprintf("%v:%v", _host, _port)
@@ -116,8 +113,21 @@ func (s *server) AddMatch(ctx context.Context, in *pb.MatchRequest) (*pb.MatchRe
 	err = w.WriteMessages(ctx, kafka.Message{
 		Key:   []byte(randomKey),
 		Value: jsonObj,
-	})
+	})*/
 
+	p, err := kafka.NewProducer(&kafka.ConfigMap{"bootstrap.servers": "my-cluster-kafka-bootstrap.kafka"})
+	if err != nil {
+		return &pb.MatchReply{Message: err.Error()}, nil
+	}
+
+	topic := "my-topic"
+
+	p.Produce(&kafka.Message{
+		TopicPartition: kafka.TopicPartition{Topic: &topic, Partition: kafka.PartitionAny},
+		Value:          jsonObj,
+	}, nil)
+
+	defer p.Close()
 	if err != nil {
 		return &pb.MatchReply{Message: err.Error()}, nil
 	}
@@ -125,22 +135,8 @@ func (s *server) AddMatch(ctx context.Context, in *pb.MatchRequest) (*pb.MatchRe
 	return &pb.MatchReply{Message: msgGrpc + msgResult}, nil
 }
 
-func goDotEnvVariable(key string) string {
-
-	// load .env file
-	err := godotenv.Load(".env")
-
-	if err != nil {
-		log.Fatalf("Error loading .env file")
-	}
-
-	return os.Getenv(key)
-}
-
 func main() {
-	//port := goDotEnvVariable("SERVER_PORT")
-	port := os.Getenv("SERVER_PORT")
-	lis, err := net.Listen("tcp", ":"+port)
+	lis, err := net.Listen("tcp", ":50051")
 	if err != nil {
 		log.Fatalf("failed to listen: %v", err)
 	}
