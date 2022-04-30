@@ -1,0 +1,42 @@
+# Consumer Deployment
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: consumer
+  namespace: practica2-201700893
+  name: consumer
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: consumer
+  template:
+    metadata:
+      labels:
+        app: consumer
+    spec:
+      containers:
+        - image: jaredosuna/api_consumer_grpc_201700893
+          name: api-consumer-grpc-201700893
+          env:
+            - name: SERVER_PORT
+              value: "50051"
+            - name: KAFKA_HOST
+              value: "my-cluster-kafka-bootstrap.kafka"
+            - name: KAFKA_PORT
+              value: "9092"
+            - name: KAFKA_TOPIC
+              value: "my-topic"
+            - name: MONGO_HOST
+              value: "34.132.136.217"
+            - name: MONGO_PORT
+              value: "80"
+            - name: MONGO_DB
+              value: "sopes"
+            - name: MONGO_COL
+              value: "fdos"
+            - name: MONGO_USER
+              value: "sopes1"
+            - name: MONGO_PASS
+              value: "1234"
